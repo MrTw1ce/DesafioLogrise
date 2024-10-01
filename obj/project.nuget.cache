@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "S70KD2wCrxU=",
+  "dgSpecHash": "TqTZzp+a0I8=",
   "success": true,
-  "projectFilePath": "C:\\Users\\lucas\\OneDrive\\Ambiente de Trabalho\\LogriseDesafio\\Code\\Desafio\\Desafio.csproj",
+  "projectFilePath": "C:\\Users\\lucas\\OneDrive\\Ambiente de Trabalho\\Desafio\\Repo\\DesafioLogrise\\Desafio.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\lucas\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\lucas\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\8.0.8\\microsoft.aspnetcore.authentication.jwtbearer.8.0.8.nupkg.sha512",

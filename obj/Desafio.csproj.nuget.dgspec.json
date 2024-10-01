@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\lucas\\OneDrive\\Ambiente de Trabalho\\LogriseDesafio\\Code\\Desafio\\Desafio.csproj": {}
+    "C:\\Users\\lucas\\OneDrive\\Ambiente de Trabalho\\Desafio\\Repo\\DesafioLogrise\\Desafio.csproj": {}
   },
   "projects": {
-    "C:\\Users\\lucas\\OneDrive\\Ambiente de Trabalho\\LogriseDesafio\\Code\\Desafio\\Desafio.csproj": {
+    "C:\\Users\\lucas\\OneDrive\\Ambiente de Trabalho\\Desafio\\Repo\\DesafioLogrise\\Desafio.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\lucas\\OneDrive\\Ambiente de Trabalho\\LogriseDesafio\\Code\\Desafio\\Desafio.csproj",
+        "projectUniqueName": "C:\\Users\\lucas\\OneDrive\\Ambiente de Trabalho\\Desafio\\Repo\\DesafioLogrise\\Desafio.csproj",
         "projectName": "Desafio",
-        "projectPath": "C:\\Users\\lucas\\OneDrive\\Ambiente de Trabalho\\LogriseDesafio\\Code\\Desafio\\Desafio.csproj",
+        "projectPath": "C:\\Users\\lucas\\OneDrive\\Ambiente de Trabalho\\Desafio\\Repo\\DesafioLogrise\\Desafio.csproj",
         "packagesPath": "C:\\Users\\lucas\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\lucas\\OneDrive\\Ambiente de Trabalho\\LogriseDesafio\\Code\\Desafio\\obj\\",
+        "outputPath": "C:\\Users\\lucas\\OneDrive\\Ambiente de Trabalho\\Desafio\\Repo\\DesafioLogrise\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\lucas\\AppData\\Roaming\\NuGet\\NuGet.Config"
