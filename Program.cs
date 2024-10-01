@@ -20,23 +20,15 @@ using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add DbContext with SQLite
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
-//builder.Services.AddIdentity<IdentityUser,IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
-
 
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Add services to the container.
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 builder.Services.AddControllers();
-
-builder.Services.AddAuthorization();
-builder.Services.AddAuthentication().AddJwtBearer().AddJwtBearer("LocalAuthIssuer");
-
 
 var app = builder.Build();
 
@@ -51,29 +43,17 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 var cartContent = new List<ProductOrder>();
-/*cartContent.Add(new ProductOrder(1,"Waffle",2));
-cartContent.Add(new ProductOrder(2,"Bread",3));
-cartContent.Add(new ProductOrder(3,"Olive",10));*/
 
 app.MapGet("/products", (AppDbContext dbContext) => {
-    //var products = new List<Products>();
-    //var products = File.ReadAllText("./data.json");
     var result = dbContext.Products.ToList();
     var products = new List<Products>();
     for(int i = 0;i<result.Count;i++){
         products.Add(new Products(JsonSerializer.Deserialize<Images>(result[i].Image),result[i].Name,result[i].Category,result[i].Price));
-        //products.Add(new Products(result[i].Image,result[i].Name,result[i].Category,result[i].Price));
-        //Console.WriteLine(JsonSerializer.Deserialize<Images>(result[i].Image));
-        //Console.WriteLine(JsonSerializer.Deserialize<Images>(result[i].Image));
     }
-    //Console.WriteLine(file);
-    //var json = JsonSerializer.Serialize(products, ProductsContext.Default.ListProducts);
     return Results.Ok(products);
 });
 
 app.MapGet("/cart", () => {
-    //var json = JsonSerializer.Serialize(cartContent, ProductOrderContext.Default.ListProductOrder);
-    //Console.WriteLine(json);
     return Results.Ok(cartContent);
 });
 
@@ -106,7 +86,6 @@ app.MapPut("/cart/{id:int}", (int id, ProductOrder order) => {
     var orderIndex = cartContent.IndexOf(targetOrder);
     cartContent[orderIndex] = new ProductOrder(targetOrder.Id, targetOrder.Product, order.Price, order.Quantity);
     return Results.Ok(cartContent);
-    //targetOrder = new ProductOrder(targetOrder.Id, targetOrder.Product, quantity);
 });
 
 app.MapDelete("/cart", () => {
@@ -120,7 +99,7 @@ app.MapGet("/users", (AppDbContext dbContext) => {
 });
 
 app.MapGet("/user/{id:int}", (int id, AppDbContext dbContext) => {
-    var result = dbContext.Users.ToList();
+    var result = dbContext.Users.Select(t => new {t.Id,t.Email}).ToList();
     var user = result.SingleOrDefault(t => id == t.Id);
     if (user is null){
         return Results.NotFound("The user doesn't exist!");
@@ -163,18 +142,12 @@ app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 app.Run();
 
 public record ProductOrder(int Id, string Product, float Price, int Quantity);
-//[JsonSerializable(typeof(List<ProductOrder>))]
-//internal partial class ProductOrderContext : JsonSerializerContext{}
 
 public record ProductReference(string Product, float Price);
 
 public record Images(string thumbnail,string mobile, string tablet, string desktop);
-//[JsonSerializable(typeof(List<Images>))]
-//internal partial class ImagesContext : JsonSerializerContext{}
 
 public record Products(Images Image, string Name, string Category, float Price);
 
-//[JsonSerializable(typeof(List<Products>))]
-//internal partial class ProductsContext : JsonSerializerContext{}
 public record UserCredentials(string Email, string Password);
 public record UserRegistration(UserCredentials Credentials, string Confirmation);
