@@ -2,11 +2,9 @@
 
 ## Table of contents
 
-- [Overview](#overview)
-  - [The challenge](#the-challenge)
+- [Resumo / Overview](#resumo-/-overview)
   - [Screenshot](#screenshot)
-  - [Links](#links)
-- [My process](#my-process)
+- [O meu processo / My process](#o-meu-processo-/-my-process)
   - [Built with](#built-with)
   - [What I learned](#what-i-learned)
   - [Continued development](#continued-development)
@@ -14,32 +12,35 @@
 - [Author](#author)
 - [Acknowledgments](#acknowledgments)
 
-**Note: Delete this note and update the table of contents based on what sections you keep.**
 
-## Overview
+## Resumo / Overview
 
-### The challenge
+ Este projeto consiste no desenvolvimento do backend de uma aplicação web com C# ASP.NET.
+ No mesmo foi criada uma API REST que exerce funções vistas em plataformas de e-commerce, nomeadamente:
+ - Adicionar produtos a um carrinho;
+ - Ajustar a quantidade de um produto no carrinho;
+ - Obter o conteúdo do carrinho;
+ - Remover todo o conteúdo do carrinho;
+ - Obter os produtos da plataforma.
 
-Users should be able to:
+================================================================================================================
 
-- Add items to the cart and remove them
-- Increase/decrease the number of items in the cart
-- See an order confirmation modal when they click "Confirm Order"
-- Reset their selections when they click "Start New Order"
-- View the optimal layout for the interface depending on their device's screen size
-- See hover and focus states for all interactive elements on the page
+ This project consists on the development of the backend of a web app with C# ASP.NET.
+ A REST API was created within this project, this API executes functions seen in e-commerce platforms, mainly:
+ - Add products to a cart;
+ - Adjust a product's quantity on the cart;
+ - Get the contents of the cart;
+ - Remove all the content from the cart;
+ - Get the products from the platform.
 
 ### Screenshot
 
 ![](./design/result.png)
 
-Add a screenshot of your solution. The easiest way to do this is to use Firefox to view your project, right-click the page and select "Take a Screenshot". You can choose either a full-height screenshot or a cropped one based on how long the page is. If it's very long, it might be best to crop it.
+## O meu processo / My process
 
-Alternatively, you can use a tool like [FireShot](https://getfireshot.com/) to take the screenshot. FireShot has a free option, so you don't need to purchase it. 
-
-Then crop/optimize/edit your image however you like, add it to your project, and update the file path in the image above.
-
-## My process
+ O desenvolvimento deste projeto começou com uma fase de planeamento, na qual se determinou que se deveria dar prioridade à implementação das rotas da API associadas ao carrinho e aos produtos da plataforma.
+ O desenvolvi
 
 ### Built with
 
