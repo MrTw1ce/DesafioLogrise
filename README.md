@@ -94,6 +94,8 @@ Use this section to outline areas that you want to continue focusing on in futur
 
 - [Playlist com Tutoriais de ASP.NET](https://www.youtube.com/playlist?list=PLdo4fOcmZ0oWunQnm3WnZxJrseIw2zSAk) - Este recurso mostrou-se importante, na realização deste desafio uma vez que agilizou a introdução ao desenvolvimento com ASP.NET
 - [Playlist com Tutoriais de Blazor](https://www.youtube.com/playlist?list=PLdo4fOcmZ0oXNZX1Q8rB-5xgTSKR8qA5k) - 
+- [Documentação Relativa às Sessões](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/app-state?view=aspnetcore-8.0) -
+- [Tutorial](https://medium.com/@KumarHalder/session-based-authorization-in-asp-net-core-95eed1d3dded)
 
 **Note: Delete this note and replace the list above with resources that helped you during the challenge. These could come in handy for anyone viewing your solution or for yourself when you look back on this project in the future.**
 

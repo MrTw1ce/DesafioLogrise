@@ -15,6 +15,11 @@ using SQLModel.NETCoreWebAPI.ApplicationDbContext;
 using SQLModel.Desafio.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
+
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 
 
@@ -27,10 +32,26 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+{
+        options.Cookie.Name = "authCookie";
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+});
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 builder.Services.AddControllers();
 
 var app = builder.Build();
+
+app.UseSession();
 
 app.UseHttpsRedirection();
 
@@ -93,23 +114,78 @@ app.MapDelete("/cart", () => {
     return Results.Ok(cartContent);
 });
 
-app.MapGet("/users", (AppDbContext dbContext) => {
-    var result = dbContext.Users.Select(r => new {r.Id, r.Email}).ToList();
-    return Results.Ok(result);
+app.MapPost("/submit-order", (AppDbContext dbContext, HttpContext httpContext) => {
+    if (cartContent.Count() == 0){
+        return Results.BadRequest("The cart is empty!");
+    }
+    var result = dbContext.Orders.ToList();
+    string currentUserEmail = httpContext.Session.GetString("email");
+    if (currentUserEmail is null){
+        currentUserEmail = "";
+    }
+    string orderString = JsonSerializer.Serialize(cartContent);
+    if (result.Count() == 0){
+        dbContext.Add(new Order{Id=1,UserEmail=currentUserEmail,OrderJson=orderString});
+    }
+    else {
+        dbContext.Add(new Order{Id=result.Max(r => r.Id)+1,UserEmail=currentUserEmail,OrderJson=orderString});
+    }
+    dbContext.SaveChanges();
+    return Results.Ok("Order submitted!");
 });
 
-app.MapGet("/user/{id:int}", (int id, AppDbContext dbContext) => {
-    var result = dbContext.Users.Select(t => new {t.Id,t.Email}).ToList();
-    var user = result.SingleOrDefault(t => id == t.Id);
-    if (user is null){
+app.MapGet("/orders", (AppDbContext dbContext, HttpContext httpContext) => {
+    if (httpContext.Session.GetString("role") != "admin"){
+        return Results.Unauthorized();
+    }
+    var result = dbContext.Orders.ToList();
+    var orders = new List<UserOrder>();
+    for(int i = 0; i<result.Count();i++){
+        orders.Add(new UserOrder(result[i].Id,result[i].UserEmail,JsonSerializer.Deserialize(result[i].OrderJson, ProductOrderContext.Default.ListProductOrder)));
+    }
+    return Results.Ok(orders);
+}).RequireAuthorization();
+
+app.MapGet("/user-orders/{id:int}", (int id, AppDbContext dbContext, HttpContext httpContext) => {
+    var accounts = dbContext.Users.ToList();
+    var targetAccount = accounts.SingleOrDefault(r => id == r.Id);
+    if ((targetAccount is null) || (id == 0)){
+        return Results.NotFound("User doesn't exist!");
+    }
+    if ((httpContext.Session.GetInt32("id") == targetAccount.Id) || (httpContext.Session.GetString("role") == "admin")){
+        var result = dbContext.Orders.ToList().FindAll(r => r.UserEmail == targetAccount.Email).ToList();
+        var orders = new List<UserOrder>();
+        for(int i = 0; i<result.Count();i++){
+            orders.Add(new UserOrder(result[i].Id,result[i].UserEmail,JsonSerializer.Deserialize(result[i].OrderJson, ProductOrderContext.Default.ListProductOrder)));
+        }
+        return Results.Ok(orders);
+    }
+    return Results.Unauthorized();
+}).RequireAuthorization();
+
+app.MapGet("/users", (AppDbContext dbContext, HttpContext httpContext) => {
+    if (httpContext.Session.GetString("role") != "admin"){
+        return Results.Unauthorized();
+    }
+    var result = dbContext.Users.Select(r => new {r.Id, r.Email, r.Role}).ToList();
+    return Results.Ok(result);
+}).RequireAuthorization();
+
+app.MapGet("/user/{id:int}", (int id, AppDbContext dbContext,HttpContext httpContext) => {
+    var result = dbContext.Users.Select(t => new {t.Id,t.Email,t.Role}).ToList();
+    var targetAccount = result.SingleOrDefault(t => id == t.Id);
+    if (targetAccount is null){
         return Results.NotFound("The user doesn't exist!");
     }
-    return Results.Ok(user);
-});
+    if (((httpContext.Session.GetInt32("id") == targetAccount.Id) || (httpContext.Session.GetString("role") == "admin")) && (targetAccount.Id != 0)){
+        return Results.Ok(targetAccount);
+    }
+    return Results.Unauthorized();
+}).RequireAuthorization();
 
-app.MapPost("/register", [AllowAnonymous] (AppDbContext dbContext, UserRegistration data) => {
+app.MapPost("/register", (AppDbContext dbContext, UserRegistration data) => {
     var users = dbContext.Users.ToList();
-    var newUser = new User{Id = users.Max(r => r.Id) + 1, Email = data.Credentials.Email, Password = data.Credentials.Password};
+    var newUser = new User{Id = users.Max(r => r.Id) + 1, Email = data.Credentials.Email, Password = data.Credentials.Password, Role = "user"};
     var existingUser = users.SingleOrDefault(t => data.Credentials.Email == t.Email);
     if (existingUser is null){
         if (data.Credentials.Password != data.Confirmation){
@@ -122,26 +198,44 @@ app.MapPost("/register", [AllowAnonymous] (AppDbContext dbContext, UserRegistrat
     return Results.BadRequest("Email is already being used!");
 });
 
-app.MapPost("/login", (AppDbContext dbContext, UserCredentials credentials) => {
+app.MapPost("/login", (AppDbContext dbContext, HttpContext httpContext, UserCredentials credentials) => {
     var users = dbContext.Users.ToList();
     var userAccount = users.SingleOrDefault(t => credentials.Email == t.Email);
     if (userAccount is not null && userAccount.Email == credentials.Email && userAccount.Password == credentials.Password){
-        var tokenHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
-        
-        return Results.Ok(userAccount);
+        //var tokenHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
+        httpContext.Session.SetInt32("id", userAccount.Id);
+        httpContext.Session.SetString("email", userAccount.Email);
+        httpContext.Session.SetString("role",userAccount.Role);
+        var claims = new List<Claim>{
+            new(ClaimTypes.Email, userAccount.Email),
+        };
+        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        var authProperties = new AuthenticationProperties();
+        httpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,new ClaimsPrincipal(claimsIdentity),authProperties);
+        return Results.Ok("Logged In");
     }
     return Results.Unauthorized();
 });
 
-app.MapPost("/logout", () => {
-    return "Logout";
+app.MapPost("/logout", (HttpContext httpContext) => {
+    httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+    httpContext.Session.Clear();
+    return Results.Ok("Logged Out");
 }).RequireAuthorization();
+
+app.MapGet("/current-user", (HttpContext httpContext) => {
+    return Results.Ok(httpContext.Session.GetString("email"));
+});
 
 app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 
 app.Run();
 
 public record ProductOrder(int Id, string Product, float Price, int Quantity);
+[JsonSerializable(typeof(List<ProductOrder>))]
+internal partial class ProductOrderContext : JsonSerializerContext{}
+
+public record UserOrder(int Id, string Email, List<ProductOrder> Order);
 
 public record ProductReference(string Product, float Price);
 
@@ -151,3 +245,5 @@ public record Products(Images Image, string Name, string Category, float Price);
 
 public record UserCredentials(string Email, string Password);
 public record UserRegistration(UserCredentials Credentials, string Confirmation);
+
+
