@@ -16,11 +16,7 @@
             <div class="user-cart">
                 <h3 id="cart-title" class="highlight-text">Your Cart (0)</h3>
                 <div id="cart-body"></div>
-                <div id="cart-footer">
-
-                </div>
-
-
+                <div id="cart-footer"></div>
             </div>
         </div>
     </div>
@@ -54,9 +50,12 @@
   </div>
 </div>
 
-
 <script>
-// Função para obter os produtos com uma chamada AJAX.
+/*
+ Método para obter os produtos com uma chamada AJAX.
+ ===============================================================
+ Method to obtain the content of the cart through an AJAX call.
+*/
 async function getProducts(){
     var products;
     await $.ajax({
@@ -71,7 +70,11 @@ async function getProducts(){
     return products;
 }
 
-// Função para obter o conteúdo do carrinho com uma chamada AJAX.
+/*
+ Método para obter o conteúdo do carrinho com uma chamada AJAX.
+ ===============================================================
+ Method to obtain the content of the cart through an AJAX call.
+*/
 async function getCart(){
     var cart;
     await $.ajax({
@@ -86,7 +89,11 @@ async function getCart(){
     return cart;
 }
 
-// Função para atualizar o catálogo da página.
+/*
+ Método para atualizar o catálogo da página.
+ ============================================
+ Method to update the page's catalogue.
+*/
 function updateCatalogue(){
     let catalogue = document.getElementById("catalogue-items");
     let html = "";
@@ -143,9 +150,15 @@ function updateCatalogue(){
     catalogue.innerHTML = html;
 }
 
-// Função para adicionar um produto ao carrinho com uma chamada AJAX.
-// -> product: Nome do produto a ser adicionado ao carrinho;
-// -> price: Preço do produto a ser adicionado ao carrinho.
+/*
+ Método para adicionar um produto ao carrinho com uma chamada AJAX.
+ -> product: Nome do produto a ser adicionado ao carrinho;
+ -> price: Preço por unidade do produto a ser adicionado ao carrinho.
+ =====================================================================
+ Method to add a product ot the cart through an AJAX call.
+ -> product: Name of the product to be added to the cart.
+ -> price: Price per unit of the product to be added to the cart.
+*/
 function addProductToCart(product,price){
     let order = {"product":product,"price":price};
     $.ajax({
@@ -163,8 +176,13 @@ function addProductToCart(product,price){
     });
 }
 
-// Função para remover um produto do carrinho com uma chamada AJAX.
-// -> id: Id do produto no carrinho.
+/*
+ Método para remover um produto do carrinho com uma chamada AJAX.
+ -> id: ID do produto no carrinho.
+ ==================================================================
+ Method to remove a product from the cart through an AJAX call.
+ -> id: ID of the product in the cart.
+*/
 function removeProductFromCart(id){
     $.ajax({
             url: "http://localhost:5033/cart/" + id,
@@ -180,11 +198,19 @@ function removeProductFromCart(id){
     });
 }
 
-// Função para incrementar por 1 a quantidade de um determinado produto no carrinho com recurso a uma chamada AJAX.
-// A quantidade de um produto no carrinho só será incrementada enquanto esta for menor que 99.
-// -> id: Id do produto no carrinho.
-// -> currentQuantity: Quantidade atual do produto no carrinho.
-// -> currentPrice: Preço atual do produto no carrinho.
+/*
+ Método para incrementar por 1 a quantidade de um determinado produto no carrinho com recurso a uma chamada AJAX.
+ A quantidade de um produto no carrinho só será incrementada enquanto esta for menor que 99.
+ -> id: Id do produto no carrinho.
+ -> currentQuantity: Quantidade atual do produto no carrinho.
+ -> currentPrice: Preço por unidade atual do produto no carrinho.
+ ===================================================================================================================
+ Method to increment by 1 the quantity of a product in the cart through an AJAX call.
+ The quantity of a product in the cart will only be incremented while it is less than 99.
+ -> id: ID of the product in the cart.
+ -> currentQuantity: Product's current quantity in the cart.
+ -> currentPrice: Product's current price per unit in the cart.
+*/
 function incrementQuantity(id,currentQuantity,currentPrice){
     if(currentQuantity < 99){
         $.ajax({
@@ -202,11 +228,19 @@ function incrementQuantity(id,currentQuantity,currentPrice){
     }
 }
 
-// Função para decrementar por 1 a quantidade de um determinado produto no carrinho com recurso a uma chamada AJAX.
-// A quantidade de um produto no carrinho só será decrementada enquanto esta for maior que 1.
-// -> id: Id do produto no carrinho.
-// -> currentQuantity: Quantidade atual do produto no carrinho.
-// -> currentPrice: Preço atual do produto no carrinho.
+/*
+ Método para decrementar por 1 a quantidade de um determinado produto no carrinho com recurso a uma chamada AJAX.
+ A quantidade de um produto no carrinho só será decrementada enquanto esta for maior que 1.
+ -> id: ID do produto no carrinho.
+ -> currentQuantity: Quantidade atual do produto no carrinho.
+ -> currentPrice: Preço atual do produto por unidade no carrinho.
+ ===================================================================================================================
+ Method to decrement by 1 the quantity of a product in the cart through an AJAX call.
+ The quantity of a product in the cart will only be decremented while it is greater than 1.
+ -> id: ID of the product in the cart.
+ -> currentQuantity: Product's current quantity in the cart.
+ -> currentPrice: Product's current price per unit in the cart.
+*/
 function decrementQuantity(id,currentQuantity,currentPrice){
     if(currentQuantity > 1){
         $.ajax({
@@ -224,7 +258,11 @@ function decrementQuantity(id,currentQuantity,currentPrice){
     }
 }
 
-// Função para contar o total de produtos no carrinho.
+/*
+ Método para contar o total de produtos no carrinho.
+ ======================================================
+ Method to count the total of products in the cart.
+*/
 function countCartProducts(){
     let totalProducts = 0;
     for(let i=0;i<cartJSON.length;i++){
@@ -233,7 +271,11 @@ function countCartProducts(){
     return totalProducts;
 }
 
-// Função para atualizar o conteúdo do carrinho.
+/*
+ Método para atualizar o conteúdo do carrinho.
+ ==============================================
+ Method to update the cart's content.
+*/
 function updateCart(){
     let cartBody = document.getElementById("cart-body");
     let cartTitle = document.getElementById("cart-title");
@@ -291,7 +333,7 @@ function updateCart(){
                                     <div class="row d-flex justify-content-center">
                                         <div class="col-10 d-flex justify-content-center delivery-note">
                                             <img src="./assets/images/icon-carbon-neutral.svg">
-                                            &nbspThis is a&nbspcarbon-neutral&nbspdelivery
+                                            &nbspThis is a&nbsp<b>carbon-neutral</b>&nbspdelivery
                                         </div>
                                     </div>
                                     <br>
@@ -302,11 +344,16 @@ function updateCart(){
     }
 }
 
-// Método para atualizar o conteúdo da modal consoante o conteúdo do carrinho.
+/*
+ Método para atualizar o conteúdo da modal consoante o conteúdo do carrinho.
+ =============================================================================
+ Method to update the content of the modal based on the content of the cart.
+*/
 function addOrderToModal(){
     let modalBody = document.getElementById("cart-modal-body");
     let html = "";
     let totalPrice = 0;
+    html = `<div class="order-products-modal">`
     for(let i=0; i<cartJSON.length;i++){
         totalPrice += (cartJSON[i]['quantity'] * cartJSON[i]['price']);
         let img = productJSON.find(product => product['name'] == cartJSON[i]['product'])['image']['thumbnail'];
@@ -334,18 +381,24 @@ function addOrderToModal(){
                 `;
     }
     html += `
-                <div class="row align-items-center">
-                    <div class="col-6">Order Total</div>
-                    <div class="col-6 d-flex justify-content-end">
-                        <h2 class="bold-text">$${totalPrice.toFixed(2)}</h2>
-                    </div>
+            </div>
+            <div class="row align-items-center order-price-modal">
+                <div class="col-6">Order Total</div>
+                <div class="col-6 d-flex justify-content-end">
+                    <h2 class="bold-text">$${totalPrice.toFixed(2)}</h2>
                 </div>
+            </div>
             `
     modalBody.innerHTML = html;
 }
 
-// Função para abrir uma modal.
-// -> targetModal: ID da modal a ser fechada.
+/*
+ Método para abrir uma modal.
+ -> targetModal: ID da modal a ser aberta.
+ =================================================
+ Method to open a modal.
+ -> targetModal: ID of the modal to be openned.
+*/
 function openModal(targetModal){
     let modal = document.getElementById(targetModal);
     modal.style.display = "block";
@@ -353,16 +406,26 @@ function openModal(targetModal){
     addOrderToModal();
 }
 
-// Função para fechar uma modal.
-// -> targetModal: ID da modal a ser fechada.
+/* 
+ Método para fechar uma modal.
+ -> targetModal: ID da modal a ser fechada.
+ =================================================
+ Method to close a modal.
+ -> targetModal: ID of the modal to be closed.
+*/
 function closeModal(targetModal){
     let modal = document.getElementById(targetModal);
     modal.style.display = "none";
     $('body, html').css('overflow', 'auto');
 }
 
-// Função para submeter uma ordem com recurso a uma chamada AJAX.
-// Quando uma ordem é submetida o conteúdo do carrinho é apagado.
+/*
+ Método para submeter uma ordem com recurso a uma chamada AJAX.
+ Quando uma ordem é submetida o conteúdo do carrinho é apagado.
+ ===============================================================
+ Method to submit an order through an AJAX call.
+ When an order is submitted the cart's content is erased.
+*/
 function submitOrder(){
     $.ajax({
         url: "http://localhost:5033/cart/",
@@ -383,11 +446,21 @@ function submitOrder(){
 }
 
 var cartJSON, productJSON;
+/*
+ Uma chamada AJAX é realizada de forma a obter o conteúdo do carrinho.
+ ======================================================================
+ An AJAX call is made in order to retrieve the cart's content.
+*/
 getCart().then((result) => {
     cartJSON = result;
     updateCart();
 });
 
+/*
+ Uma chamada AJAX é realizada de forma a obter os produtos na base de dados.
+ ============================================================================
+ An AJAX call is made in order to retrieve the products in the database.
+*/
 getProducts().then((result) => {
     productJSON = result;
     updateCatalogue();

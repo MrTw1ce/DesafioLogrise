@@ -92,10 +92,21 @@
 #cart-footer{
     padding: 15px !important;
 }
-.delivery-note, .order-details{
+.delivery-note{
     padding: 15px !important;
+}
+.delivery-note, .order-details{
     border-radius: 15px;
     background-color: hsl(13, 31%, 94%);
+}
+.order-products-modal{
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 450px;
+    padding: 15px 0px 0px 15px;
+}
+.order-price-modal{
+    padding: 5px 15px 15px 15px;
 }
 .highlight-text{
     font-weight: 700;
@@ -128,10 +139,6 @@
     padding: 5%;
     border-radius: 15px;
 }
-.modal-body{
-    overflow-y: auto;
-    max-height: 550px;
-}
 .confirmed-icon{
     width: 60px;
     height: 45px;
@@ -141,9 +148,35 @@
     height: 4.5rem;
     border-radius: 5px;
 }
+@media (max-width:376px){
+    .modal-body{
+        overflow-y: hidden !important;
+        max-height: 300px !important;
+    }
+    .order-products-modal{
+        overflow-y: auto;
+        overflow-x: hidden;
+        max-height: 150px !important;
+        padding: 5px 0px 0px 5px !important;
+    }
+}
 @media (max-width:1445px){
     .modal-body{
         overflow-y: auto;
         max-height: 300px;
     }
+    .delivery-note{
+        width: 20em;
+    }
+    .modal-body{
+        overflow-y: hidden !important;
+        max-height: 650px;
+    }
+    .order-products-modal{
+        overflow-y: auto;
+        overflow-x: hidden;
+        max-height: 450px;
+        padding: 15px 0px 0px 15px;
+    }
 }
+
