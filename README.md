@@ -2,10 +2,10 @@
 
 ## Table of contents
 
-- [Resumo / Overview](#resumo-/-overview)
+- [Resumo / Overview](#resumo--overview)
   - [Screenshot](#screenshot)
-- [O meu processo / My process](#o-meu-processo-/-my-process)
-  - [Construído com / Built with](#construído-com-/-built-with)
+- [O meu processo / My process](#o-meu-processo--my-process)
+  - [Construído com / Built with](#construído-com--built-with)
   - [What I learned](#what-i-learned)
   - [Continued development](#continued-development)
   - [Useful resources](#useful-resources)
