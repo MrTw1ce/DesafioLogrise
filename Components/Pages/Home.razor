@@ -7,7 +7,7 @@
 <section class="catalogue" style="background-color: hsl(20, 50%, 98%);">
     <div class="row">
         <div class="col-sm-8">
-            <h1 class="bold-text">Desserts</h1>
+            <h1 class="catalogue-title bold-text">Desserts</h1>
             <div id="catalogue-items" class="row">
 
             </div>
@@ -102,7 +102,7 @@ function updateCatalogue(){
         if(cartJSON.find(order => order['product'] == productJSON[i]['name'])){
             let productOrder = cartJSON.find(order => order['product'] == productJSON[i]['name']);
             html += `
-                    <div class="col-sm-4" style="padding: 2% 1% 2% 1%">
+                    <div class="col-sm-4 d-flex justify-content-center" style="padding: 2% 1% 2% 1%">
                         <div class="card product-card" style="width: 17rem;">
                             <img class="selected-product-image" src="${productJSON[i]['image']['desktop']}">
 
@@ -124,7 +124,7 @@ function updateCatalogue(){
         }
         else{
             html += `
-                    <div class="col-sm-4" style="padding: 2% 1% 2% 1%">
+                    <div class="col-sm-4 d-flex justify-content-center" style="padding: 2% 1% 2% 1%">
                         <div class="card product-card" style="width: 17rem;">
                             <img class="product-image" src="${productJSON[i]['image']['desktop']}">
 
