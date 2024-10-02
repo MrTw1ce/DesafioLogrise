@@ -174,8 +174,8 @@ app.MapGet("/users", (AppDbContext dbContext, HttpContext httpContext) => {
 app.MapGet("/user/{id:int}", (int id, AppDbContext dbContext,HttpContext httpContext) => {
     var result = dbContext.Users.Select(t => new {t.Id,t.Email,t.Role}).ToList();
     var targetAccount = result.SingleOrDefault(t => id == t.Id);
-    if (targetAccount is null){
-        return Results.NotFound("The user doesn't exist!");
+    if ((targetAccount is null) || (id == 0)){
+        return Results.NotFound("User doesn't exist!");
     }
     if (((httpContext.Session.GetInt32("id") == targetAccount.Id) || (httpContext.Session.GetString("role") == "admin")) && (targetAccount.Id != 0)){
         return Results.Ok(targetAccount);
@@ -185,7 +185,7 @@ app.MapGet("/user/{id:int}", (int id, AppDbContext dbContext,HttpContext httpCon
 
 app.MapPost("/register", (AppDbContext dbContext, UserRegistration data) => {
     var users = dbContext.Users.ToList();
-    var newUser = new User{Id = users.Max(r => r.Id) + 1, Email = data.Credentials.Email, Password = data.Credentials.Password, Role = "user"};
+    var newUser = new User{Id = users.Max(r => r.Id) + 1, Email = data.Credentials.Email, Password = data.Credentials.Password, Role = "client"};
     var existingUser = users.SingleOrDefault(t => data.Credentials.Email == t.Email);
     if (existingUser is null){
         if (data.Credentials.Password != data.Confirmation){
