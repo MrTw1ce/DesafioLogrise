@@ -84,6 +84,8 @@
  
  Após a implementação das rotas e funções referidas anteriormente, foram realizadas umas alterações ao código de forma garantir que o frontend se ajustava consoante o tamanho do ecrã e o bom funcionamento do projeto tanto no frontend como no backend.
 
+ As rotas implementadas podem ser testadas na rota `/swagger/index.html`.
+
 ==========================================================================
 
  The development of this project started with a planning phase, in which was decided that priority should be given to the implementation of the API routes that are associated to either the cart or the products of the platform.
@@ -131,6 +133,8 @@
  
  After implementing every route and function referred previously, the code suffered slight alterations in order to ensure that the frontend adapts to the screen's size and that the project works as intended in both the frontend and backend.
 
+ The implemented routes can be teste in the route `/swagger/index.html`.
+
 ### Construído com / Built with
 
 - Semantic HTML5 markup
@@ -142,6 +146,7 @@
 - [Blazor](https://dotnet.microsoft.com/pt-br/apps/aspnet/web-apps/blazor)
 - [Entity Framework Core](https://github.com/dotnet/efcore)
 - [SQLite](https://www.postgresql.org/)
+- [Swagger](https://swagger.io/)
 
 ### O que eu aprendi / What I learned
 

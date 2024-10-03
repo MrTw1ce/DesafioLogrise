@@ -169,7 +169,6 @@ function addProductToCart(product,price){
             data: JSON.stringify(order),
             success: function(data){
                 cartJSON = data;
-                console.log(cartJSON);
                 updateCart();
                 updateCatalogue();
             }
@@ -191,7 +190,6 @@ function removeProductFromCart(id){
             dataType: "json",
             success: function(data){
                 cartJSON = data;
-                console.log(cartJSON);
                 updateCart();
                 updateCatalogue();
             }

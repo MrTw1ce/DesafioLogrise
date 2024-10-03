@@ -1,40 +1,37 @@
 using Desafio.Components;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Components.Web;
-using System;
-using System.IO;
-using System.Text;
 
-using System; 
-using System.Collections; 
-using System.Collections.Generic; 
-
+/*
+ Imports para a base de dados.
+ ==============================
+ Imports for the database.
+*/
 using Microsoft.EntityFrameworkCore;
 using SQLModel.NETCoreWebAPI.ApplicationDbContext;
 using SQLModel.Desafio.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authorization;
+
+/*
+ Imports para a autentificação.
+ ================================
+ Imports for the authentication.
+*/
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
-
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
-
-
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
-
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options => {
-        options.Cookie.Name = "authCookie";
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+    options.Cookie.Name = "authCookie";
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
 });
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options => {
@@ -42,7 +39,6 @@ builder.Services.AddSession(options => {
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
-
 
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 builder.Services.AddControllers();
@@ -61,8 +57,22 @@ app.UseAntiforgery();
 app.UseAuthentication();
 app.UseAuthorization();
 
+/*
+ Esta variável armazena o conteúdo do carrinho.
+ ==============================================
+ This variable stores the cart's content.
+*/
 var cartContent = new List<ProductOrder>();
 
+/*
+ Esta rota é utilizada para obter os produtos presentes no catálogo da aplicação.
+ Para o efeito a mesma realiza uma query à tabela 'products' da base de dados.
+ Os valores da coluna 'image' dessa tabela são depois convertidos de uma string para um record.
+ =====================================================================================================
+ This route is used to retrieve the products present on the application's catalogue.
+ In order to so it does a query to the table 'products' from the database.
+ The values of the collumn 'image' from that table are afterwards converted from a string to a record.
+*/
 app.MapGet("/products", (AppDbContext dbContext) => {
     var result = dbContext.Products.ToList();
     var products = new List<Products>();
@@ -72,6 +82,11 @@ app.MapGet("/products", (AppDbContext dbContext) => {
     return Results.Ok(products);
 });
 
+/*
+ Esta rota é utlizada para obter o conteúdo atual do carrinho.
+ ================================================================
+ This route is used to retrieve the current content from the cart.
+*/
 app.MapGet("/cart", () => {
     return Results.Ok(cartContent);
 });
