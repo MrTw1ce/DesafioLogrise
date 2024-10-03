@@ -145,7 +145,101 @@
 - [Entity Framework Core](https://github.com/dotnet/efcore)
 - [SQLite](https://www.postgresql.org/)
 
-### What I learned
+### O que eu aprendi / What I learned
+
+ Devido ao facto deste ser um dos primeiros projetos desenvolvidos por mim com recurso a C# ASP.NET, todo o desenvolvimento do mesmo foi um enorme processo de aprendizagem.
+
+ Neste projeto, aprendi a criar uma API minima em C# ASP.NET e a conectá-la a uma base de dados de forma a conseguir obter e armazenar dados na mesma.
+
+ ```cs
+  app.MapPost("/submit-order", (AppDbContext dbContext, HttpContext httpContext) => {
+      if (cartContent.Count() == 0){
+          return Results.BadRequest("The cart is empty!");
+      }
+      var result = dbContext.Orders.ToList();
+      string currentUserEmail = httpContext.Session.GetString("email");
+      if (currentUserEmail is null){
+          currentUserEmail = "";
+      }
+      string orderString = JsonSerializer.Serialize(cartContent);
+      if (result.Count() == 0){
+          dbContext.Add(new Order{Id=1,UserEmail=currentUserEmail,OrderJson=orderString});
+      }
+      else {
+          dbContext.Add(new Order{Id=result.Max(r => r.Id)+1,UserEmail=currentUserEmail,OrderJson=orderString});
+      }
+      dbContext.SaveChanges();
+      return Results.Ok("Order submitted!");
+  });
+
+  app.MapGet("/orders", (AppDbContext dbContext, HttpContext httpContext) => {
+      if (httpContext.Session.GetString("role") != "admin"){
+          return Results.Unauthorized();
+      }
+      var result = dbContext.Orders.ToList();
+      var orders = new List<UserOrder>();
+      for(int i = 0; i<result.Count();i++){
+          orders.Add(new UserOrder(result[i].Id,result[i].UserEmail,JsonSerializer.Deserialize(result[i].OrderJson, ProductOrderContext.Default.ListProductOrder)));
+      }
+      return Results.Ok(orders);
+  }).RequireAuthorization();
+ ´´´
+
+ Durante a realização deste projeto também ganhei alguma experiência em garantir que o conteúdo de uma página web se adapte ao tamanho do ecrã com recurso a CSS.
+ O CSS que se segue foi produzido de forma a garantir que alguns elementos da página web fossem expostos devidamente em ecrãs com uma determinada larguta.
+ 
+ ```css
+  @media (max-width:376px){
+      .catalogue-title{
+          padding-left: 10%;
+      }
+
+      .modal-body{
+          overflow-y: hidden !important;
+          max-height: 300px !important;
+      }
+
+      .order-products-modal{
+          overflow-y: auto;
+          overflow-x: hidden;
+          max-height: 150px !important;
+          padding: 5px 0px 0px 5px !important;
+      }
+  }
+
+  @media (max-width:1445px){
+      .confirm.btn{
+          width: 18rem !important;
+      }
+
+      .modal-body{
+          overflow-y: auto;
+          max-height: 300px;
+      }
+
+      .delivery-note{
+          width: 20em;
+      }
+
+      .modal-body{
+          overflow-y: hidden !important;
+          max-height: 650px;
+      }
+
+      .order-products-modal{
+          overflow-y: auto;
+          overflow-x: hidden;
+          max-height: 450px;
+          padding: 15px 0px 0px 15px;
+      }
+  }
+
+  @media (min-width:1850px){
+      .catalogue-title{
+          padding-left: 3.5% !important;
+      }
+  }
+ ´´´
 
 Use this section to recap over some of your major learnings while working through this project. Writing these out and providing code samples of areas you want to highlight is a great way to reinforce your own knowledge.
 
@@ -164,10 +258,6 @@ const proudOfThisFunc = () => {
   console.log('🎉')
 }
 ```
-
-If you want more help with writing markdown, we'd recommend checking out [The Markdown Guide](https://www.markdownguide.org/) to learn more.
-
-**Note: Delete this note and the content within this section and replace with your own learnings.**
 
 ### Continued development
 
