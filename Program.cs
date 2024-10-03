@@ -335,6 +335,9 @@ app.MapPost("/register", (AppDbContext dbContext, UserRegistration data) => {
  If there is an account with the given email and password, that account's data (id, email and role) will be stored in the session and the user will be authenticated.
 */
 app.MapPost("/login", (AppDbContext dbContext, HttpContext httpContext, UserCredentials credentials) => {
+    if (httpContext.Session.GetString("email") != null){
+        return Results.BadRequest("You are already logged in!");
+    }
     var users = dbContext.Users.ToList();
     var userAccount = users.SingleOrDefault(t => credentials.Email == t.Email);
     if (userAccount is not null && userAccount.Email == credentials.Email && userAccount.Password == credentials.Password && credentials.Email != "" && credentials.Password != ""){
@@ -347,7 +350,7 @@ app.MapPost("/login", (AppDbContext dbContext, HttpContext httpContext, UserCred
         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
         var authProperties = new AuthenticationProperties();
         httpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,new ClaimsPrincipal(claimsIdentity),authProperties);
-        return Results.Ok("Logged In");
+        return Results.Ok("Logged in");
     }
     return Results.Unauthorized();
 });
@@ -362,7 +365,7 @@ app.MapPost("/login", (AppDbContext dbContext, HttpContext httpContext, UserCred
 app.MapPost("/logout", (HttpContext httpContext) => {
     httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
     httpContext.Session.Clear();
-    return Results.Ok("Logged Out");
+    return Results.Ok("Logged out");
 }).RequireAuthorization();
 
 app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
