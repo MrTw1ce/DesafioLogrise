@@ -32,14 +32,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
-{
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options => {
         options.Cookie.Name = "authCookie";
         options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
 });
 builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession(options =>
-{
+builder.Services.AddSession(options => {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;

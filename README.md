@@ -6,12 +6,10 @@
   - [Screenshot](#screenshot)
 - [O meu processo / My process](#o-meu-processo--my-process)
   - [Construído com / Built with](#construído-com--built-with)
-  - [What I learned](#what-i-learned)
-  - [Continued development](#continued-development)
-  - [Useful resources](#useful-resources)
-- [Author](#author)
-- [Acknowledgments](#acknowledgments)
-
+  - [O que eu aprendi / What I learned](#o-que-eu-aprendi--what-i-learned)
+  - [Desenvolvimento contínuo / Continued development](#desenvolvimento-contínuo--continued-development)
+  - [Recursos úteis / Useful resources](#recursos-úteis--useful-resources)
+- [Autor / Author](#autor--author)
 
 ## Resumo / Overview
 
@@ -56,21 +54,21 @@
 
  Após a implementação do frontend, criou-se um base de dados em SQLite na qual seriam armazenados os dados da aplicação. Nesta base de dados constam as seguintes tabelas:
  - products
-  - name      -> Nome do produto
-  - image     -> String JSON com os caminhos para as imagens de um produto
-  - category  -> Categoria do produto
-  - price     -> Preço por unidade do produto
+   - name      -> Nome do produto
+   - image     -> String JSON com os caminhos para as imagens de um produto
+   - category  -> Categoria do produto
+   - price     -> Preço por unidade do produto
 
  - users
-  - id        -> ID do utilizador
-  - email     -> Email do utilizador
-  - password  -> Password do utilizador
-  - role      -> Role do utilizador
+   - id        -> ID do utilizador
+   - email     -> Email do utilizador
+   - password  -> Password do utilizador
+   - role      -> Role do utilizador
 
  - orders
-  - id        -> ID da ordem
-  - userEmail -> Email do utilizador que submeteu a ordem
-  - orderJSON -> String JSON com os dados dos produtos associados à ordem
+   - id        -> ID da ordem
+   - userEmail -> Email do utilizador que submeteu a ordem
+   - orderJSON -> String JSON com os dados dos produtos associados à ordem
 
  Assim que se incluiu a base de dados no projeto, adicionaram-se as seguintes rotas para a gestão de utilizadores:
   - GET   /users          -> Obtém os dados de todos os utilizadores
@@ -103,21 +101,21 @@
 
  Once the frontend was implemented, a SQLite database in which the app's data would be stored was created. Within this database the following tables can be found:
  - products
-  - name      -> Product's name
-  - image     -> JSON string with the paths to a product's images
-  - category  -> Product's category
-  - price     -> Product's price per unit
+   - name      -> Product's name
+   - image     -> JSON string with the paths to a product's images
+   - category  -> Product's category
+   - price     -> Product's price per unit
 
  - users
-  - id        -> User's ID
-  - email     -> User's email
-  - password  -> User's password
-  - role      -> User's role
+   - id        -> User's ID
+   - email     -> User's email
+   - password  -> User's password
+   - role      -> User's role
 
  - orders
-  - id        -> Order's ID
-  - userEmail -> Email from the user who submitted the order
-  - orderJSON -> JSON string with the data from the products associated with the order
+   - id        -> Order's ID
+   - userEmail -> Email from the user who submitted the order
+   - orderJSON -> JSON string with the data from the products associated with the order
 
  Once the database was included in the project, the following routes for user management were added:
   - GET   /users          -> Gets data from every user
@@ -147,9 +145,13 @@
 
 ### O que eu aprendi / What I learned
 
- Devido ao facto deste ser um dos primeiros projetos desenvolvidos por mim com recurso a C# ASP.NET, todo o desenvolvimento do mesmo foi um enorme processo de aprendizagem.
+ Devido ao facto deste ser um dos primeiros projetos desenvolvidos por mim com recurso a C# ASP.NET, todo o desenvolvimento do mesmo foi um enorme processo de aprendizagem. Durante a realização deste projeto obtive experiência a:
+ - Criar uma API mínima em C# ASP.NET e conectá-la a uma base de dados;
+ - Obter e armazenar dados numa base de dados conectada a uma API;
+ - Criar e manipular sessões numa API;
+ - Implementar autorizações nas rotas da API.
 
- Neste projeto, aprendi a criar uma API minima em C# ASP.NET e a conectá-la a uma base de dados de forma a conseguir obter e armazenar dados na mesma.
+ O código que se segue mostra duas rotas da API, `/submit-order` e `/orders`. Estas rotas têm o intuito de armazenar a ordem de um utilizador na base de dados e de obter todas as ordens realizadas pelos utilizadores, respetivamente. Para que a segunda rota devolva as ordens realizadas é necessário que o utilizador esteja autenticado e que a sessão do mesmo tenha a role 'admin'.
 
  ```cs
   app.MapPost("/submit-order", (AppDbContext dbContext, HttpContext httpContext) => {
@@ -183,10 +185,9 @@
       }
       return Results.Ok(orders);
   }).RequireAuthorization();
- ´´´
+ ```
 
- Durante a realização deste projeto também ganhei alguma experiência em garantir que o conteúdo de uma página web se adapte ao tamanho do ecrã com recurso a CSS.
- O CSS que se segue foi produzido de forma a garantir que alguns elementos da página web fossem expostos devidamente em ecrãs com uma determinada larguta.
+ Durante a realização deste projeto também adquiri experiência em garantir que o conteúdo de uma página web se adapte ao tamanho do ecrã com recurso a CSS. O código CSS que se segue foi produzido de forma a garantir que alguns elementos da página web fossem exibidos devidamente em ecrãs com uma largura específica.
  
  ```css
   @media (max-width:376px){
@@ -239,42 +240,134 @@
           padding-left: 3.5% !important;
       }
   }
- ´´´
+ ```
 
-Use this section to recap over some of your major learnings while working through this project. Writing these out and providing code samples of areas you want to highlight is a great way to reinforce your own knowledge.
+==========================================================================
 
-To see how you can add code snippets, see below:
+ Due to this being on of the first projects developed by me in C# ASP.NET, its development process was a whole learning processo. During the development of this project I've gained experience in:
+ - Creating a minimal API with C# ASP.NET and connecting it to a database;
+ - Getting and storing data in a database connected to the API;
+ - Creating and manipulating sessions on an API;
+ - Implementing authorizations in the API routes.
 
-```html
-<h1>Some HTML code I'm proud of</h1>
-```
-```css
-.proud-of-this-css {
-  color: papayawhip;
-}
-```
-```js
-const proudOfThisFunc = () => {
-  console.log('🎉')
-}
-```
+ The following code shows the API routes `/submit-order` e `/orders`. These routes have the objective of storing an user's order and getting every order made by the users, respectively. In order for the secound route to return the orders made by the users, the user must be authenticated and his session have the role 'admin'.
 
-### Continued development
+ ```cs
+  app.MapPost("/submit-order", (AppDbContext dbContext, HttpContext httpContext) => {
+      if (cartContent.Count() == 0){
+          return Results.BadRequest("The cart is empty!");
+      }
+      var result = dbContext.Orders.ToList();
+      string currentUserEmail = httpContext.Session.GetString("email");
+      if (currentUserEmail is null){
+          currentUserEmail = "";
+      }
+      string orderString = JsonSerializer.Serialize(cartContent);
+      if (result.Count() == 0){
+          dbContext.Add(new Order{Id=1,UserEmail=currentUserEmail,OrderJson=orderString});
+      }
+      else {
+          dbContext.Add(new Order{Id=result.Max(r => r.Id)+1,UserEmail=currentUserEmail,OrderJson=orderString});
+      }
+      dbContext.SaveChanges();
+      return Results.Ok("Order submitted!");
+  });
 
-Use this section to outline areas that you want to continue focusing on in future projects. These could be concepts you're still not completely comfortable with or techniques you found useful that you want to refine and perfect.
+  app.MapGet("/orders", (AppDbContext dbContext, HttpContext httpContext) => {
+      if (httpContext.Session.GetString("role") != "admin"){
+          return Results.Unauthorized();
+      }
+      var result = dbContext.Orders.ToList();
+      var orders = new List<UserOrder>();
+      for(int i = 0; i<result.Count();i++){
+          orders.Add(new UserOrder(result[i].Id,result[i].UserEmail,JsonSerializer.Deserialize(result[i].OrderJson, ProductOrderContext.Default.ListProductOrder)));
+      }
+      return Results.Ok(orders);
+  }).RequireAuthorization();
+ ```
 
-**Note: Delete this note and the content within this section and replace with your own plans for continued development.**
+ While developing this project I've also adquired experience in ensuring that the contents of a web page adapt to the size of the screen through CSS. The following CSS code was created in order to ensure that some elements of the web page were displayed properly according to the screen's width.
+ 
+ ```css
+  @media (max-width:376px){
+      .catalogue-title{
+          padding-left: 10%;
+      }
 
-### Recursos Úteis / Useful resources
+      .modal-body{
+          overflow-y: hidden !important;
+          max-height: 300px !important;
+      }
 
-- [Playlist com Tutoriais de ASP.NET](https://www.youtube.com/playlist?list=PLdo4fOcmZ0oWunQnm3WnZxJrseIw2zSAk) - Este recurso mostrou-se importante, na realização deste desafio uma vez que agilizou a introdução ao desenvolvimento com ASP.NET
-- [Playlist com Tutoriais de Blazor](https://www.youtube.com/playlist?list=PLdo4fOcmZ0oXNZX1Q8rB-5xgTSKR8qA5k) - 
-- [Documentação Relativa às Sessões](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/app-state?view=aspnetcore-8.0) -
-- [Tutorial sobre Autorização com Recurso a Sessões ](https://medium.com/@KumarHalder/session-based-authorization-in-asp-net-core-95eed1d3dded)
+      .order-products-modal{
+          overflow-y: auto;
+          overflow-x: hidden;
+          max-height: 150px !important;
+          padding: 5px 0px 0px 5px !important;
+      }
+  }
 
-**Note: Delete this note and replace the list above with resources that helped you during the challenge. These could come in handy for anyone viewing your solution or for yourself when you look back on this project in the future.**
+  @media (max-width:1445px){
+      .confirm.btn{
+          width: 18rem !important;
+      }
 
-## Author
+      .modal-body{
+          overflow-y: auto;
+          max-height: 300px;
+      }
+
+      .delivery-note{
+          width: 20em;
+      }
+
+      .modal-body{
+          overflow-y: hidden !important;
+          max-height: 650px;
+      }
+
+      .order-products-modal{
+          overflow-y: auto;
+          overflow-x: hidden;
+          max-height: 450px;
+          padding: 15px 0px 0px 15px;
+      }
+  }
+
+  @media (min-width:1850px){
+      .catalogue-title{
+          padding-left: 3.5% !important;
+      }
+  }
+ ```
+
+### Desenvolvimento contínuo / Continued development
+
+ Em projetos futuros, gostaria de expandir os meus conhecimentos no desenvolvimento do backend, com o intuito de:
+  - Desenvolver aplicações mais complexas;
+  - Entender melhor os conceitos de sessão, autentificação e de autorização e a implementação destes.
+
+==========================================================================
+
+ In future projects, I'd like to expand my knowledge in backend development, with the objective of:
+ - Developing more complex applications;
+ - Improving my understanding the concepts of session, authentication and authorization and their implementation.
+
+### Recursos úteis / Useful resources
+
+- [Playlist com Tutoriais de C# ASP.NET](https://www.youtube.com/playlist?list=PLdo4fOcmZ0oWunQnm3WnZxJrseIw2zSAk)
+- [Playlist com Tutoriais de Blazor](https://www.youtube.com/playlist?list=PLdo4fOcmZ0oXNZX1Q8rB-5xgTSKR8qA5k)
+- [Documentação C# ASP.NET sobre Sessões](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/app-state?view=aspnetcore-8.0)
+- [Tutorial sobre Autorização com Recurso a Sessões](https://medium.com/@KumarHalder/session-based-authorization-in-asp-net-core-95eed1d3dded)
+
+==========================================================================
+
+- [Playlist with C# ASP.NET Tutorials](https://www.youtube.com/playlist?list=PLdo4fOcmZ0oWunQnm3WnZxJrseIw2zSAk)
+- [Playlist with Blazor Tutorials](https://www.youtube.com/playlist?list=PLdo4fOcmZ0oXNZX1Q8rB-5xgTSKR8qA5k)
+- [C# ASP.NET Sessions Docummentation](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/app-state?view=aspnetcore-8.0)
+- [Session Based Authorization Tutorial](https://medium.com/@KumarHalder/session-based-authorization-in-asp-net-core-95eed1d3dded)
+
+## Autor / Author
 
 - GitHub - [MrTw1ce](https://github.com/MrTw1ce)
 - LinkIn - [Lucas Martins](https://www.linkedin.com/in/lucas-martins-657aa8325/)
